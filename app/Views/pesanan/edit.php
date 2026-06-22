@@ -77,7 +77,7 @@
                 <button type="button" class="btn modal-burjo-btn-cancel" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-1"></i> Tutup
                 </button>
-                <?= form_submit('submit', '<i class="bi bi-check-circle me-1"></i> Simpan', ['class' => 'btn modal-burjo-btn-save']); ?>
+                <?= form_submit('submit',  'Simpan', ['class' => 'btn modal-burjo-btn-save']); ?>
             </div>
 
             <?= form_close(); ?>
