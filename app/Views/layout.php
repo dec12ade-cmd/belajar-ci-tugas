@@ -10,7 +10,7 @@ if (uri_string() != "") {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Toko - <?= $hlm ?></title>
+    <title>Burjo Bima - <?= $hlm ?></title>
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet"
