@@ -121,6 +121,11 @@
                 </tfoot>
             </table>
         </div>
+                <div class="mt-3">
+            <a href="<?= base_url('detail_pesanan/download') ?>" class="btn btn-success">
+                <i class="bi bi-file-earmark-pdf"></i> Download Data Ke PDF
+            </a>
+        </div>
     </div>
 </div>
 

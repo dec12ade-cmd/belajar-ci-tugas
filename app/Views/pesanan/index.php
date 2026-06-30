@@ -103,6 +103,12 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+                    </div>
+                <div class="mt-3">
+            <a href="<?= base_url('pesanan/download') ?>" class="btn btn-success">
+                <i class="bi bi-file-earmark-pdf"></i> Download Data Ke PDF
+            </a>
+        </div>
         </div>
     </div>
 </div>

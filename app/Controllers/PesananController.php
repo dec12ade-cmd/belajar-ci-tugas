@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\PesananModel;
+use Dompdf\Dompdf;
 
 class PesananController extends BaseController
 {
@@ -16,22 +17,22 @@ class PesananController extends BaseController
     }
 
     public function index()
-{
-    if (session()->get('role') === 'pelanggan') {
-        $pesanan = $this->pesananModel
-                        ->select('pesanan.*, user.nama as nama_user')
-                        ->join('user', 'user.id = pesanan.user_id')
-                        ->where('pesanan.user_id', session()->get('user_id'))
-                        ->findAll();
-    } else {
-        $pesanan = $this->pesananModel
-                        ->select('pesanan.*, user.nama as nama_user')
-                        ->join('user', 'user.id = pesanan.user_id')
-                        ->findAll();
-    }
+    {
+        if (session()->get('role') === 'pelanggan') {
+            $pesanan = $this->pesananModel
+                            ->select('pesanan.*, user.nama as nama_user')
+                            ->join('user', 'user.id = pesanan.user_id')
+                            ->where('pesanan.user_id', session()->get('user_id'))
+                            ->findAll();
+        } else {
+            $pesanan = $this->pesananModel
+                            ->select('pesanan.*, user.nama as nama_user')
+                            ->join('user', 'user.id = pesanan.user_id')
+                            ->findAll();
+        }
 
-    return view('pesanan/index', ['pesanan' => $pesanan]);
-}
+        return view('pesanan/index', ['pesanan' => $pesanan]);
+    }
 
     public function create()
     {
@@ -69,5 +70,30 @@ class PesananController extends BaseController
 
         return redirect()->to(base_url('pesanan'))
             ->with('success', 'Data Pesanan Berhasil Dihapus');
+    }
+
+    public function download()
+    {
+        if (session()->get('role') === 'pelanggan') {
+            $pesanan = $this->pesananModel
+                            ->select('pesanan.*, user.nama as nama_user')
+                            ->join('user', 'user.id = pesanan.user_id')
+                            ->where('pesanan.user_id', session()->get('user_id'))
+                            ->findAll();
+        } else {
+            $pesanan = $this->pesananModel
+                            ->select('pesanan.*, user.nama as nama_user')
+                            ->join('user', 'user.id = pesanan.user_id')
+                            ->findAll();
+        }
+
+        $html     = view('pesanan/download_pdf', ['pesanan' => $pesanan]);
+        $filename = date('Y-m-d-H-i-s') . '-pesanan.pdf';
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream($filename, ['Attachment' => true]);
     }
 }

@@ -22,6 +22,7 @@ $routes->group('pesanan', ['filter' => 'auth'], function ($routes) {
     $routes->post('', 'PesananController::create');
     $routes->post('edit/(:any)', 'PesananController::edit/$1');
     $routes->get('delete/(:any)', 'PesananController::delete/$1');
+    $routes->get('download', 'PesananController::download');
 });
 
 $routes->group('detail_pesanan', ['filter' => 'auth'], function ($routes) {
@@ -29,4 +30,5 @@ $routes->group('detail_pesanan', ['filter' => 'auth'], function ($routes) {
     $routes->get('(:num)',        'DetailPesananController::index/$1');
     $routes->post('create/(:num)', 'DetailPesananController::create/$1');
     $routes->get('delete/(:num)', 'DetailPesananController::delete/$1');
+    $routes->get('download', 'DetailPesananController::download');
 });

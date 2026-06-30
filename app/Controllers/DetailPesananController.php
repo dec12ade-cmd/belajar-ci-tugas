@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\DetailPesananModel;
 use App\Models\MenuModel;
+use Dompdf\Dompdf;
 
 class DetailPesananController extends BaseController
 {
@@ -56,4 +57,33 @@ public function index($pesanan_id = null)
         return redirect()->to(base_url('detail_pesanan/' . $detail['pesanan_id'])) // ← strip bukan underscore
             ->with('success', 'Detail Pesanan Berhasil Dihapus');
     }
+    public function download()
+{
+    $user_id = session()->get('user_id');
+
+    if (session()->get('role') === 'pelanggan') {
+        $detail = $this->detailPesananModel
+                       ->select('detail_pesanan.*')
+                       ->join('pesanan', 'pesanan.id = detail_pesanan.pesanan_id')
+                       ->where('pesanan.user_id', $user_id)
+                       ->where('detail_pesanan.deleted_at', null)
+                       ->findAll();
+    } else {
+        $detail = $this->detailPesananModel->findAll();
+    }
+
+    $html = view('detail_pesanan/download_pdf', [
+        'detail' => $detail
+    ]);
+
+    $filename = date('Y-m-d-H-i-s') . '-detail-pesanan.pdf';
+
+    $dompdf = new \Dompdf\Dompdf();
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+    $dompdf->stream($filename, [
+        'Attachment' => true
+    ]);
+}
 }
